@@ -1,9 +1,13 @@
 import * as readlinesync from "readline-sync";
 import { colors } from "./src/util/Colors.ts";
+import { Conta } from "./src/model/conta.ts";
 
 export function main() {
 
     let opcao: number;
+    let conta1 = new Conta("Ana", 1 , 1234, 1000);
+    let conta2 = new Conta("Joao", 2, 1234, 500);
+    let contas: Conta[] = [conta1, conta2];
 
     while (true) {
 
@@ -49,8 +53,10 @@ export function main() {
             case 2:
                 console.log(colors.fg.whitestrong, 
                     "\n\nListar todas as Contas\n\n", colors.reset);
-
-                keyPress()
+                    for (let conta of contas) {
+                        conta.visualizar();
+                    }
+                    keyPress()
                 break;
             case 3:
                 console.log(colors.fg.whitestrong, 
@@ -73,13 +79,32 @@ export function main() {
             case 6:
                 console.log(colors.fg.whitestrong, 
                     "\n\nSaque\n\n", colors.reset);
+                    
+                    let numContaSaque = readlinesync.questionInt("Numero da Conta: ");
+                    let valorSaque = readlinesync.questionFloat("Valor do saque: ");
 
+                    let contaSaque = contas.find(c => c.numero === numContaSaque);
+
+                    if (contaSaque){
+                        contaSaque.sacar(valorSaque);
+                    }else{
+                        console.log("Conta não encontrada");
+                    }
                 keyPress()
                 break;
             case 7:
                 console.log(colors.fg.whitestrong, 
                     "\n\nDepósito\n\n", colors.reset);
 
+                    let numContaDep = readlinesync.questionInt("Numero da conta: ");
+                    let valorDep = readlinesync.questionFloat("Valor do deposito: ");
+                    let contaDep = contas.find(c => c.numero === numContaDep);
+
+                    if (contaDep) {
+                        contaDep.depositar(valorDep);
+                    }else{
+                        console.log("Conta não encontrada!");
+                    }
                 keyPress()
                 break;
             case 8:
@@ -98,6 +123,8 @@ export function main() {
     }
 
 }
+
+
 
 /* Função com os dados da pessoa desenvolvedora */
 function sobre(): void {
