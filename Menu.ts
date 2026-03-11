@@ -1,13 +1,36 @@
 import * as readlinesync from "readline-sync";
 import { colors } from "./src/util/Colors.ts";
-import { Conta } from "./src/model/conta.ts";
+import { Conta } from './src/model/conta.ts';
+import { ContaCorrente } from './src/model/ContaCorrente.ts';
+import { ContaPoupanca } from './src/model/contaPoupanca.ts';
 
 export function main() {
 
     let opcao: number;
-    let conta1 = new Conta("Ana", 1 , 1234, 1000);
-    let conta2 = new Conta("Joao", 2, 1234, 500);
-    let contas: Conta[] = [conta1, conta2];
+    
+   // Objeto da Classe Conta (Teste)
+    const conta: Conta = new Conta(1, 123, 1, "Adriana", 10000);
+    conta.visualizar();
+    conta.sacar(10500);
+    conta.visualizar();
+    conta.depositar(5000);
+    conta.visualizar();
+
+   // Objeto da Classe ContaCorrente (Teste)
+    const contacorrente: ContaCorrente = new ContaCorrente(2, 123, 1, "Mariana", 15000, 1000);
+    contacorrente.visualizar();
+    contacorrente.sacar(2000);
+    contacorrente.visualizar();
+    contacorrente.depositar(1000);
+    contacorrente.visualizar();
+
+    // Objeto da Classe ContaPoupanca (teste)
+    const contapoupanca: ContaPoupanca = new ContaPoupanca(3, 123, 2, "Victor", 1000, 10);
+    contapoupanca.visualizar();
+    contapoupanca.sacar(200);
+    contapoupanca.visualizar();
+    contapoupanca.depositar(1000);
+    contapoupanca.visualizar();
 
     while (true) {
 
@@ -29,15 +52,13 @@ export function main() {
         console.log("            9 - Sair                                 ");
         console.log("                                                     ");
         console.log("*****************************************************");
-        console.log("                                                     ", 
-        colors.reset);
+        console.log("                                                     ", colors.reset);
 
         console.log("Entre com a opção desejada: ");
         opcao = readlinesync.questionInt("");
 
         if (opcao == 9) {
-            console.log(colors.fg.greenstrong, 
-                "\nBanco do Brazil com Z - O seu Futuro começa aqui!");
+            console.log(colors.fg.greenstrong, "\nBanco do Brazil com Z - O seu Futuro começa aqui!");
             sobre();
             console.log(colors.reset, "");
             process.exit(0);
@@ -45,77 +66,47 @@ export function main() {
 
         switch (opcao) {
             case 1:
-                console.log(colors.fg.whitestrong, 
-                    "\n\nCriar Conta\n\n", colors.reset);
+                console.log(colors.fg.whitestrong, "\n\nCriar Conta\n\n", colors.reset);
                 
                 keyPress()
                 break;
             case 2:
-                console.log(colors.fg.whitestrong, 
-                    "\n\nListar todas as Contas\n\n", colors.reset);
-                    for (let conta of contas) {
-                        conta.visualizar();
-                    }
-                    keyPress()
+                console.log(colors.fg.whitestrong, "\n\nListar todas as Contas\n\n", colors.reset);
+
+                keyPress()
                 break;
             case 3:
-                console.log(colors.fg.whitestrong, 
-                    "\n\nConsultar dados da Conta - por número\n\n", colors.reset);
+                console.log(colors.fg.whitestrong, "\n\nConsultar dados da Conta - por número\n\n", colors.reset);
 
                 keyPress()
                 break;
             case 4:
-                console.log(colors.fg.whitestrong, 
-                    "\n\nAtualizar dados da Conta\n\n", colors.reset);
+                console.log(colors.fg.whitestrong, "\n\nAtualizar dados da Conta\n\n", colors.reset);
 
                 keyPress()
                 break;
             case 5:
-                console.log(colors.fg.whitestrong, 
-                    "\n\nApagar uma Conta\n\n", colors.reset);
+                console.log(colors.fg.whitestrong, "\n\nApagar uma Conta\n\n", colors.reset);
 
                 keyPress()
                 break;
             case 6:
-                console.log(colors.fg.whitestrong, 
-                    "\n\nSaque\n\n", colors.reset);
-                    
-                    let numContaSaque = readlinesync.questionInt("Numero da Conta: ");
-                    let valorSaque = readlinesync.questionFloat("Valor do saque: ");
+                console.log(colors.fg.whitestrong, "\n\nSaque\n\n", colors.reset);
 
-                    let contaSaque = contas.find(c => c.numero === numContaSaque);
-
-                    if (contaSaque){
-                        contaSaque.sacar(valorSaque);
-                    }else{
-                        console.log("Conta não encontrada");
-                    }
                 keyPress()
                 break;
             case 7:
-                console.log(colors.fg.whitestrong, 
-                    "\n\nDepósito\n\n", colors.reset);
+                console.log(colors.fg.whitestrong, "\n\nDepósito\n\n", colors.reset);
 
-                    let numContaDep = readlinesync.questionInt("Numero da conta: ");
-                    let valorDep = readlinesync.questionFloat("Valor do deposito: ");
-                    let contaDep = contas.find(c => c.numero === numContaDep);
-
-                    if (contaDep) {
-                        contaDep.depositar(valorDep);
-                    }else{
-                        console.log("Conta não encontrada!");
-                    }
                 keyPress()
                 break;
             case 8:
-                console.log(colors.fg.whitestrong, 
-                    "\n\nTransferência entre Contas\n\n", colors.reset);
+                console.log(colors.fg.whitestrong, "\n\nTransferência entre Contas\n\n", colors.reset);
 
                 keyPress()
                 break;
             default:
-                console.log(colors.fg.whitestrong, 
-                    "\nOpção Inválida!\n", colors.reset);
+                console.log(colors.fg.whitestrong, "\nOpção Inválida!\n", colors.reset);
 
                 keyPress()
                 break;
@@ -123,8 +114,6 @@ export function main() {
     }
 
 }
-
-
 
 /* Função com os dados da pessoa desenvolvedora */
 function sobre(): void {
