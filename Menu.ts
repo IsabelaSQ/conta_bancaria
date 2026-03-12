@@ -1,36 +1,18 @@
 import * as readlinesync from "readline-sync";
-import { colors } from "./src/util/Colors.ts";
-import { Conta } from './src/model/conta.ts';
-import { ContaCorrente } from './src/model/ContaCorrente.ts';
-import { ContaPoupanca } from './src/model/contaPoupanca.ts';
+import { colors } from "./src/util/Colors";
+import { Conta } from "./src/model/conta";
+import { ContaCorrente } from './src/model/ContaCorrente';
+import { ContaPoupanca} from './src/model/contaPoupanca';
+import { contaController } from "./src/controller/contaController";
 
 export function main() {
 
-    let opcao: number;
-    
-   // Objeto da Classe Conta (Teste)
-    const conta: Conta = new Conta(1, 123, 1, "Adriana", 10000);
-    conta.visualizar();
-    conta.sacar(10500);
-    conta.visualizar();
-    conta.depositar(5000);
-    conta.visualizar();
+    let contas: contaController = new contaController();
 
-   // Objeto da Classe ContaCorrente (Teste)
-    const contacorrente: ContaCorrente = new ContaCorrente(2, 123, 1, "Mariana", 15000, 1000);
-    contacorrente.visualizar();
-    contacorrente.sacar(2000);
-    contacorrente.visualizar();
-    contacorrente.depositar(1000);
-    contacorrente.visualizar();
+    let opcao: number, numero: number, agencia: number, tipo: number, saldo: number, limite: number, aniversario: number;
+    let titular:string;
+    const tiposContas = ["Conta Corrente", "Conta Poupanca"];
 
-    // Objeto da Classe ContaPoupanca (teste)
-    const contapoupanca: ContaPoupanca = new ContaPoupanca(3, 123, 2, "Victor", 1000, 10);
-    contapoupanca.visualizar();
-    contapoupanca.sacar(200);
-    contapoupanca.visualizar();
-    contapoupanca.depositar(1000);
-    contapoupanca.visualizar();
 
     while (true) {
 
@@ -67,11 +49,37 @@ export function main() {
         switch (opcao) {
             case 1:
                 console.log(colors.fg.whitestrong, "\n\nCriar Conta\n\n", colors.reset);
-                
+                console.log("Digite o Numero da agencia: ");
+                agencia = readlinesync.questionInt("");
+
+                console.log("Digite o Nome do Titular da conta: ");
+                titular = readlinesync.question("");
+
+                console.log("\nDigite o tipo de conta: ");
+                tipo = readlinesync.keyInSelect(tiposContas, "", {cancel: false}) + 1;
+
+                console.log("\nDigite o Saldo da conta: ");
+                saldo = readlinesync.questionFloat("");
+
+                switch (tipo){
+                    case 1:
+                        console.log("Digite o Limite da Conta(R$): ");
+                        limite = readlinesync.questionFloat("");
+                        contas.cadastrar(new ContaCorrente(contas.gerarNumero(), agencia, tipo, titular, saldo, limite));
+                    break;
+
+                    case 2:
+                        console.log("Digite o Dia do aniversario da Conta Poupanca: ");
+                        aniversario = readlinesync.questionInt("");
+                        contas.cadastrar(new ContaPoupanca(contas.gerarNumero(), agencia, tipo, titular, saldo, aniversario));
+                    break;
+                }
+
                 keyPress()
                 break;
             case 2:
                 console.log(colors.fg.whitestrong, "\n\nListar todas as Contas\n\n", colors.reset);
+                contas.listarTodos();
 
                 keyPress()
                 break;
@@ -129,5 +137,4 @@ function keyPress(): void {
     console.log("\nPressione enter para continuar...");
     readlinesync.prompt();
 }
-
 main();

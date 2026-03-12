@@ -1,7 +1,7 @@
 {
   "name": "conta_bancaria",
   "version": "1.0.0",
-  "type": "module",
+  "type": "commonjs",
   "dependencies": {
     "readline-sync": "^1.4.10"
   },
