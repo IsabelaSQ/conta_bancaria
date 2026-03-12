@@ -1,4 +1,4 @@
-import { Conta } from "./conta.ts";
+import { Conta } from "./conta";
 
 export class ContaPoupanca extends Conta{
     private _aniversario: number;

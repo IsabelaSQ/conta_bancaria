@@ -1,4 +1,4 @@
-import { Conta } from "./conta.ts";
+import { Conta } from "./conta";
 
 export class ContaCorrente extends Conta {
 
