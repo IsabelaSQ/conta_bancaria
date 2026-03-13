@@ -9,7 +9,7 @@ export function main() {
 
     let contas: contaController = new contaController();
 
-    let opcao: number, numero: number, agencia: number, tipo: number, saldo: number, limite: number, aniversario: number;
+    let opcao: number, numero: number, agencia: number, tipo: number, saldo: number, limite: number, aniversario: number, valor: number, numeroDestino: number;
     let titular:string;
     const tiposContas = ["Conta Corrente", "Conta Poupanca"];
 
@@ -86,32 +86,98 @@ export function main() {
             case 3:
                 console.log(colors.fg.whitestrong, "\n\nConsultar dados da Conta - por número\n\n", colors.reset);
 
+                console.log("Digite o numero da conta: ");
+                numero = readlinesync.questionInt("");
+                contas.procurarPorNumero(numero);
                 keyPress()
                 break;
             case 4:
                 console.log(colors.fg.whitestrong, "\n\nAtualizar dados da Conta\n\n", colors.reset);
 
+                console.log("Digite o numero da Conta: ");
+                numero = readlinesync.questionInt("");
+
+                let conta = contas.buscarNoArray(numero);
+
+                if (conta != null){
+                    console.log("Digite o Numero da agencia: ");
+                    agencia = readlinesync.questionInt("");
+
+                    console.log("Digite o Nome do Titular da conta: ");
+                    titular = readlinesync.question("");
+
+                    tipo = conta.tipo;
+
+                    console.log("\nDigite o Saldo da conta(R$): ");
+                    saldo = readlinesync.questionFloat("");
+
+                    switch (tipo) {
+                        case 1:
+                            console.log("Digite o Limite da Conta (R$): ");
+                            limite = readlinesync.questionFloat("");
+                            contas.atualizar(new ContaCorrente(numero,agencia,tipo,titular,saldo,limite,));
+                        break;
+
+                        case 2:
+                            console.log("Digite o Dia do aniversario da Conta Poupanca: ");
+                            aniversario = readlinesync.questionInt("");
+                            contas.atualizar(new ContaPoupanca(numero,agencia,tipo,titular,saldo,aniversario));
+                        break;
+                    }
+                }else{
+                    console.log(colors.fg.red, "\nA Conta numero: " + numero + "não foi encontrada!", colors.reset);
+                }
                 keyPress()
                 break;
             case 5:
                 console.log(colors.fg.whitestrong, "\n\nApagar uma Conta\n\n", colors.reset);
+
+                console.log("Digite o numero da Conta: ");
+                numero = readlinesync.questionInt("");
+                contas.deletar(numero);
 
                 keyPress()
                 break;
             case 6:
                 console.log(colors.fg.whitestrong, "\n\nSaque\n\n", colors.reset);
 
+                console.log("Digite o numero da Conta: ");
+                numero = readlinesync.questionInt("");
+
+                console.log("\nDigite o valor do Saque(R$): ");
+                valor = readlinesync.questionFloat("");
+
+                contas.sacar(numero, valor);
+
                 keyPress()
                 break;
             case 7:
                 console.log(colors.fg.whitestrong, "\n\nDepósito\n\n", colors.reset);
 
-                keyPress()
-                break;
+                console.log("Digite o numero da Conta: ");
+                numero = readlinesync.questionInt(""); 
+
+                console.log("\nDigite o valor do Depósito (R$): ");
+                valor = readlinesync.questionFloat(""); 
+
+                contas.depositar(numero, valor);
+
+                keyPress();
+            break;
             case 8:
                 console.log(colors.fg.whitestrong, "\n\nTransferência entre Contas\n\n", colors.reset);
 
-                keyPress()
+                console.log("Digite o numero da Conta de Origem: ");
+                numero = readlinesync.questionInt("");
+
+                console.log("\nDigite o numero da Conta de Destino: ");
+                numeroDestino = readlinesync.questionInt(""); 
+
+                console.log("\nDigite o valor da Transferência (R$): "); 
+                valor = readlinesync.questionFloat("");
+
+                contas.transferir(numero, numeroDestino, valor);
+                keyPress();
                 break;
             default:
                 console.log(colors.fg.whitestrong, "\nOpção Inválida!\n", colors.reset);

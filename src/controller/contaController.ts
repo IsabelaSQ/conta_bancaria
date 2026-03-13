@@ -14,26 +14,7 @@ export class contaController implements contaRepository{
         this.listaContas.push(conta);
         console.log(colors.fg.green, "\nConta numero: " + this.numero + " foi criada com sucesso!", colors.reset); // 
     }
-
-    procurarPorNumero(numero: number): void {
-        throw new Error("Method not implemented.");
-    }
-
-    atualizar(conta: Conta): void {
-        throw new Error("Method not implemented.");
-    }
-    deletar(numero: number): void {
-        throw new Error("Method not implemented.");
-    }
-    sacar(numero: number, valor: number): void {
-        throw new Error("Method not implemented.");
-    }
-    depositar(numero: number, valor: number): void {
-        throw new Error("Method not implemented.");
-    }
-    transferir(numeroOrigem: number, numeroDestino: number, valor: number): void {
-        throw new Error("Method not implemented.");
-    }
+    
 
     private listaContas: Array<Conta> = new Array<Conta>();
     numero: number = 0;
@@ -42,5 +23,79 @@ export class contaController implements contaRepository{
         return ++ this.numero
     }
 
+    public buscarNoArray(numnero:number): Conta | null {
 
+        for (let conta of this.listaContas){
+            if (conta.numero === this.numero)
+                return conta;
+        }
+
+        return null;
+    }
+
+    procurarPorNumero(numero: number): void{
+        let buscaConta = this.buscarNoArray(numero);
+
+        if(buscaConta != null) {
+            buscaConta.visualizar();
+        }else{
+            console.log(colors.fg.red,"\nA Conta numero: "+ numero + " não foi encontrada!", colors.reset);
+        }
+    }
+
+    atualizar(conta: Conta): void {
+        let buscaConta = this.buscarNoArray(conta.numero);
+
+        if (buscaConta != null) {
+            this.listaContas[this.listaContas.indexOf(buscaConta)] = conta;
+            console.log(colors.fg.green, "\n A Conta numero: " + conta.numero + "foi atualizada com sucesso!", colors.reset);
+        }else{
+            console.log(colors.fg.red,"\nA Conta numero: "+ conta.numero, "não foi encontrada!", colors.reset);
+        }
+    }
+
+    deletar(numero: number): void{
+        let buscaConta = this.buscarNoArray(numero);
+
+        if (buscaConta != null) {
+            this.listaContas.splice(this.listaContas.indexOf(buscaConta), 1);
+            console.log(colors.fg.green,"\nA Conta numero: " + numero + "deletada", colors.reset);
+        }else{
+            console.log(colors.fg.red,"\nA Conta numero: "+ numero + "não foi encontrada!", colors.reset);
+        }
+    }
+
+    public sacar(numero: number, valor: number): void {
+        let conta = this.buscarNoArray(numero);
+
+        if(conta != null) {
+            if(conta.sacar(valor) == true)
+            console.log(colors.fg.green, "\nO Saque na Conta numero: " + numero + "foi efetuado com sucesso!", colors.reset);
+        }
+    }
+
+    public depositar(numero: number, valor: number): void {
+        let conta = this.buscarNoArray(numero);
+
+        if (conta != null){
+            conta.depositar(valor);
+            console.log(colors.fg.green,"\nO Deposito na Conta numero: " + numero + "foi efetuado com sucesso", colors.reset);
+        }else{
+            console.log(colors.fg.red,"\nA Conta numero: "+ numero + "não foi encontrada!", colors.reset);
+        }
+    }
+
+    public transferir(numeroOrigem: number, numeroDestino: number, valor: number): void{
+        let contaOrigem = this.buscarNoArray(numeroOrigem);
+        let contaDestino = this.buscarNoArray(numeroDestino);
+
+        if (contaOrigem != null && contaDestino != null) {
+            if(contaOrigem.sacar(valor) == true) {
+                contaDestino.depositar(valor);
+                console.log(colors.fg.green,"\nA Transferencia da Conta numero: " + numeroOrigem + "para a Conta numero: " + numeroDestino + " foi efetuada com sucesso!",colors.reset);
+            }else{
+                console.log(colors.fg.red,"\nA Conta numero: "+ numeroOrigem + "e/ou a Conta numero: " + numeroDestino + "não foram encontradas!", colors.reset);
+            }
+        }
+    }
 }
